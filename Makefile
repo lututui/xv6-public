@@ -195,7 +195,7 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_firstprogram\
-	_aaaa\
+	_nullDereference\
 	_IOState\
 	_TestSchedSanity\
 	_mainWrite\
@@ -272,7 +272,7 @@ EXTRA=\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 	firstprogram.c\
-	aaaa.c\
+	nullDereference.c\
 	IOState.c\
 	TestSchedSanity.c\
 	mainWrite.c

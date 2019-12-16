@@ -4,6 +4,6 @@
 
 int main(void) {
     int *a = 0x0;
-    *a = 1;
+    printf(1, "%d\n", *a);
     exit();
 }
