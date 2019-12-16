@@ -196,6 +196,8 @@ UPROGS=\
 	_zombie\
 	_firstprogram\
 	_aaaa\
+	_IOState\
+	_TestSchedSanity\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -270,6 +272,8 @@ EXTRA=\
 	.gdbinit.tmpl gdbutil\
 	firstprogram.c\
 	aaaa.c\
+	IOState.c\
+	TestSchedSanity.c\
 
 dist:
 	rm -rf dist

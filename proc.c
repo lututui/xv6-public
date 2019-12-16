@@ -214,6 +214,10 @@ fork(void)
 
   acquire(&ptable.lock);
 
+  acquire(&tickslock);
+  np->tickCreated = ticks;
+  release(&tickslock);
+  np->ticksRunning = 0;
   np->state = RUNNABLE;
 
   release(&ptable.lock);
@@ -333,23 +337,32 @@ scheduler(void)
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+	  if (p->pid > 2 && p->lastPrintState != p->state) {
+          //cprintf("[%d] [PID %d] [%s] State: %d\n", ticks, p->pid, p->name, p->state);
+          p->lastPrintState = ticks;
+      }
+
       if(p->state != RUNNABLE)
         continue;
 
-      cprintf("Switching to process %s (%d)\n", p->name, p->pid);
+      //cprintf("Switching to process %s (%d)\n", p->name, p->pid);
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
       c->proc = p;
       p->tickScheduled = ticks;
+        if (p->pid > 2){
+           // cprintf("[%d] [PID %d] [%s] State: %d\n", ticks, p->pid, p->name, p->state);
+            p->lastPrintState = ticks;
+        }
       switchuvm(p);
       p->state = RUNNING;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
 
-      cprintf("Switching back\n");
+      //cprintf("Switching back\n");
 
       // Process is done running for now.
       // It should have changed its p->state before coming back.
@@ -381,8 +394,13 @@ sched(void)
     panic("sched running");
   if(readeflags()&FL_IF)
     panic("sched interruptible");
-  cprintf("sched enter\n");
+  //cprintf("sched enter\n");
   intena = mycpu()->intena;
+
+  acquire(&tickslock);
+  myproc()->ticksRunning += ticks - myproc()->tickScheduled;
+  release(&tickslock);
+
   swtch(&p->context, mycpu()->scheduler);
   mycpu()->intena = intena;
 }
@@ -391,7 +409,7 @@ sched(void)
 void
 yield(void)
 {
-  cprintf("PID %d yielding\n", myproc()->pid);
+  //cprintf("PID %d yielding\n", myproc()->pid);
   acquire(&ptable.lock);  //DOC: yieldlock
   myproc()->state = RUNNABLE;
   sched();

@@ -89,3 +89,15 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int sys_getruntime(void) {
+    acquire(&tickslock);
+    int rt = myproc()->ticksRunning + (ticks - myproc()->tickScheduled);
+    release(&tickslock);
+
+    return rt;
+}
+
+int sys_getcreatetime(void) {
+    return myproc()->tickCreated;
+}

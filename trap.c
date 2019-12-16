@@ -105,16 +105,16 @@ trap(struct trapframe *tf)
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER){
 #ifdef SCHEDFLAGDEFAULT
-    cprintf("default\n");
+    //cprintf("default\n");
     yield();
 #endif
 #ifdef SCHEDFLAGFRR
-    cprintf("frr\n");
+    //cprintf("frr\n");
     if (myproc()->tickScheduled + QUANTA <= ticks)
       yield();
 #endif
 #ifdef SCHEDFLAGFCFS
-    cprintf("FCFS\n");
+    //cprintf("FCFS\n");
 #endif
   }
 
