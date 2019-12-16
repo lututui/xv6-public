@@ -277,7 +277,7 @@ void freevm(pde_t *);
 
 void inituvm(pde_t *, char *, uint);
 
-int loaduvm(pde_t *, char *, struct inode *, uint, uint);
+int loaduvm(pde_t *, char *, struct inode *, uint, uint, uint);
 
 pde_t *copyuvm(pde_t *, uint);
 
