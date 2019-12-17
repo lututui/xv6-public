@@ -12,7 +12,6 @@ int main(void) {
         exit();
     }
 
-
     for (int i = 0; i < P; i++) {
         if (fork() == 0) {
             int createTime = getcreatetime();
